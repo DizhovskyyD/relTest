@@ -1,0 +1,18 @@
+{
+    "name": "7012/relokia-test",
+    "description": "Test task in Relokia",
+    "autoload": {
+        "psr-4": {
+            "7012\\RelokiaTest\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Dmytro Dizhovskyy",
+            "email": "digovskijd@gmail.com"
+        }
+    ],
+    "require": {
+        "guzzle/guzzle": "^3.9"
+    }
+}
