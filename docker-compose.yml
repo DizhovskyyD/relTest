@@ -5,6 +5,8 @@ services:
     build:
       dockerfile: Dockerfile
       context: ./
+    ##web:
+    ## env_file: src/.env
     user: "${USER_ID:-1000}:${GROUP_ID:-1000}"
     restart: unless-stopped
     volumes:
