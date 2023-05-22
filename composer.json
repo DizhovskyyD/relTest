@@ -3,7 +3,7 @@
     "description": "Test task in Relokia",
     "autoload": {
         "psr-4": {
-            "7012\\RelokiaTest\\": "src/",
+            "RelokiaTest\\": "src/",
             "Zendesk\\": "src/Zendesk"
         }
     },
