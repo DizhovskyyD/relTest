@@ -51,15 +51,6 @@ class Zendesk{
         return false;
     }
 
-    public function ticket($id=0)
-    {
-        if ($id === 0) {
-
-        }else{
-
-        }
-    }
-
     /**
      * @return string
      */

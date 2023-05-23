@@ -9,7 +9,7 @@ use GuzzleHttp\Client;
 /**
  *
  */
-class ZendeskUser{
+class UsersInfo{
     private Zendesk $connekt;
     private  $client;
 
@@ -18,6 +18,11 @@ class ZendeskUser{
         $this->connekt=$connekt;
         $this->client = new Client();
     }
+
+    /**
+     * @return mixed|string|void
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
     public function getAllUser()
     {
         try {
@@ -37,6 +42,12 @@ class ZendeskUser{
         }
     }
 
+    /**
+     * @param $id
+     *
+     * @return mixed|string|void
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
     public function getUserInfoById($id)
     {
         try {
@@ -49,44 +60,6 @@ class ZendeskUser{
 
             if ($response->getStatusCode() === 200) {
                 return  json_decode((string) $response->getBody(), true);
-            }
-        } catch (Exception $e) {
-            // Handle authentication error
-            return 'Authentication failed: ' . $e->getMessage();
-        }
-    }
-
-    public function getUserName($id)
-    {
-        try {
-            $response = $this->client->request('GET',"{$this->connekt->getBaseUri()}users/{$id}.json",[
-                'headers' => [
-                    'Content-Type' => 'application/json',
-                    'Authorization' => (string) ($this->connekt->getAuthenticateString()),
-                ],
-            ]);
-
-            if ($response->getStatusCode() === 200) {
-                return  json_decode((string) $response->getBody(), true)["name"];
-            }
-        } catch (Exception $e) {
-            // Handle authentication error
-            return 'Authentication failed: ' . $e->getMessage();
-        }
-    }
-
-    public function getUserEmaile($id)
-    {
-        try {
-            $response = $this->client->request('GET',"{$this->connekt->getBaseUri()}users/{$id}.json",[
-                'headers' => [
-                    'Content-Type' => 'application/json',
-                    'Authorization' => (string) ($this->connekt->getAuthenticateString()),
-                ],
-            ]);
-
-            if ($response->getStatusCode() === 200) {
-                return  json_decode((string) $response->getBody(), true)["email"];
             }
         } catch (Exception $e) {
             // Handle authentication error

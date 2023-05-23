@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Zendesk;
 use GuzzleHttp\Client;
 
-class ZendeskTicket
+class TicketsInfo
 {
     private Zendesk $connekt;
     private $client;
@@ -81,7 +81,7 @@ class ZendeskTicket
      */
     public function getAllCommentsInTicket($id,$flag='')
     {
-        $comments= [];
+        $allComments= [];
         try {
             $response = $this->client->request('GET',"{$this->connekt->getBaseUri()}tickets/{$id}/comments",[
                 'headers' => [
@@ -91,17 +91,17 @@ class ZendeskTicket
             ]);
 
             if ($response->getStatusCode() === 200) {
-                $comments =  json_decode((string) $response->getBody(), true);
+                $allComments =  json_decode((string) $response->getBody(), true);
 
                 if ($flag === "str" || $flag === ''){
-                    foreach ($comments["comments"] as $comment){
-                        $comments[] = (string)
+                    foreach ($allComments["comments"] as $comment){
+                        $comments .=
                             "comment: ID: ".$comment["id"].
                             "; AuthorID:".$comment["author_id"].
                             "; Text:".$comment["html_body"].";";
                     }
                 }elseif ($flag === "arr"){
-                    foreach ($comments["comments"] as $comment){
+                    foreach ($allComments["comments"] as $comment){
                         $comments[] = [
                             "ID" => $comment["id"],
                             "AuthorID" => $comment["author_id"],
