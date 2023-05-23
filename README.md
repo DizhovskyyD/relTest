@@ -13,3 +13,15 @@
 9. Написати скрипт, використовуючи принципи ООП, який буде зберігати всі Tickets (умовно у вас більше 10 000 тисяч тікетів) за допомогою API (використовувати бібліотеку Guzzle) із вибраної вами платформи, а також їхні головні сутності. Результатом, повинен бути запис цих тікетів в csv файл. 
   > Headers csv file:
   > Ticket ID, Description, Status, Priority, Agent ID, Agent Name, Agent Email, Contact ID, Contact Name, Contact Email, Group ID, Group Name, Company ID, Company Name, Comments. !!!!!!
+
+# Початкові Налаштування
+В папці src є фал .env_exempl. Його потрібно переіменувати в .env і заповнити для отримання доступу по токену на платформу Zendesk. 
+
+Змінні для заповнення:
+1. API_SUBDOMAIN - Домен вашої платформи https://{буде тут}.zendesk.com
+2. API_EMAIL - пошта адміністратора
+3. API_TOKEN - токен який потрібно створити в адмінпанелі (Admin Center -> Apps and integrations -> APIs)
+
+
+
+# !!! на 9:00 23.05.2023 ще не має збереження в файл
