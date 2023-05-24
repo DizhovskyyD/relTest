@@ -15,7 +15,7 @@ class User
      * @param Zendesk $connekt
      * @param $id
      */
-    public function __construct(Zendesk $connekt,$id)
+    public function __construct(Zendesk $connekt, $id)
     {
         $userinfo = (new UsersInfo($connekt))->getUserInfoById($id);
 

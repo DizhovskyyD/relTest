@@ -3,8 +3,9 @@
 declare(strict_types=1);
 
 namespace Zendesk;
-use GuzzleHttp\Client;
 
+use Exception;
+use GuzzleHttp\Client;
 
 /**
  *
@@ -34,7 +35,7 @@ class UsersInfo{
             ]);
 
             if ($response->getStatusCode() === 200) {
-                return  json_decode((string) $response->getBody(), true);
+                return json_decode((string) $response->getBody(), true);
             }
         } catch (Exception $e) {
             // Handle authentication error

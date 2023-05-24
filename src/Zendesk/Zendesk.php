@@ -1,5 +1,7 @@
 <?php
 namespace Zendesk;
+
+use Exception;
 use GuzzleHttp\Client;
 
 /**

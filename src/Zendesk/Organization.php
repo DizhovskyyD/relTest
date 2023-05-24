@@ -3,6 +3,8 @@
 declare(strict_types=1);
 
 namespace Zendesk;
+
+use Exception;
 use GuzzleHttp\Client;
 
 class Organization
@@ -17,13 +19,12 @@ class Organization
      */
     public function __construct(Zendesk $connekt, $id)
     {
-        if($connekt->authenticate()) {
+        if ($connekt->authenticate()) {
             $this->connect = $connekt;
             $this->id = $id;
 
             $this->setInfo($connekt, $id);
         }
-
     }
 
     /**
@@ -37,7 +38,7 @@ class Organization
     {
         $client = new Client();
         try {
-            $response = $client->request('GET',"{$connekt->getBaseUri()}organizations/{$id}",[
+            $response = $client->request('GET', "{$connekt->getBaseUri()}organizations/{$id}", [
                 'headers' => [
                     'Content-Type' => 'application/json',
                     'Authorization' => "{$connekt->getAuthenticateString()}",
@@ -54,7 +55,6 @@ class Organization
             // Handle authentication error
             return 'Authentication failed: ' . $e->getMessage();
         }
-
     }
 
     /**
@@ -96,7 +96,6 @@ class Organization
     {
         return $this->name;
     }
-
 
 
 }

@@ -4,37 +4,43 @@ declare(strict_types=1);
 
 namespace Zendesk;
 
+use Exception;
 use GuzzleHttp\Client;
 
 class TicketPage
 {
-
+    private $pageNumber;
     private Zendesk $connekt;
 
-    public function __construct($connekt)
+    public function __construct($connekt, $pageNumber = '')
     {
-        $this->connekt=$connekt;
+        $this->connekt = $connekt;
+        $this->pageNumber = $pageNumber;
     }
 
-    public function getAllTicket($pageNumber='')
+    public function getAllTicket()
     {
         $client = new Client();
 
         try {
-            if ($pageNumber === '') {
+            if ($this->pageNumber === '') {
                 $response = $client->request('GET', "{$this->connekt->getBaseUri()}tickets.json", [
                     'headers' => [
                         'Content-Type' => 'application/json',
                         'Authorization' => (string) ($this->connekt->getAuthenticateString()),
                     ],
                 ]);
-            }else{
-                $response = $client->request('GET', "{$this->connekt->getBaseUri()}tickets.json?page={$pageNumber}", [
-                    'headers' => [
-                        'Content-Type' => 'application/json',
-                        'Authorization' => (string) ($this->connekt->getAuthenticateString()),
-                    ],
-                ]);
+            } else {
+                $response = $client->request(
+                    'GET',
+                    "{$this->connekt->getBaseUri()}tickets.json?page={$this->pageNumber}",
+                    [
+                        'headers' => [
+                            'Content-Type' => 'application/json',
+                            'Authorization' => (string) ($this->connekt->getAuthenticateString()),
+                        ],
+                    ]
+                );
             }
 
             if ($response->getStatusCode() === 200) {
@@ -44,7 +50,6 @@ class TicketPage
             // Handle authentication error
             return 'Authentication failed: ' . $e->getMessage();
         }
-
     }
 
     public function getCountTickets()
@@ -54,16 +59,12 @@ class TicketPage
         return $ticketsInfo["count"];
     }
 
-    public function getAllTicketsId($pageNumber='')
+    public function getAllTicketsId()
     {
-        if ($pageNumber === '') {
-            $ticketsInfo = $this->getAllTicket();
-        }else{
-            $ticketsInfo = $this->getAllTicket($pageNumber);
-        }
+        $ticketsInfo = $this->getAllTicket();
         $ticketsId = [];
 
-        foreach ($ticketsInfo["tickets"] as $ticket){
+        foreach ($ticketsInfo["tickets"] as $ticket) {
             $ticketsId[] = $ticket["id"];
         }
 

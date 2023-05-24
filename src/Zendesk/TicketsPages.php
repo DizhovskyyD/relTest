@@ -3,6 +3,8 @@
 declare(strict_types=1);
 
 namespace Zendesk;
+
+use Exception;
 use GuzzleHttp\Client;
 
 class TicketsPages
@@ -11,48 +13,42 @@ class TicketsPages
 
     public function __construct($connekt)
     {
-        $this->connekt=$connekt;
+        $this->connekt = $connekt;
     }
 
-    public function paginationAviable():bool
+    public function paginationAviable(): bool
     {
         $page = $this->getAllTicket();
-        if ($page['next_page'] !== null){
-            return true;
-        }else{
-            return false;
-        }
+
+        return ($page['next_page'] !== null) ? true : false;
     }
 
     public function getAllPagesNumber()
     {
         $pagesNumber = [];
-        if ($this->paginationAviable()){
-            $pagesNumber[]= '1';
-            for ($i=1;;$i++) {
+        if ($this->paginationAviable()) {
+            $pagesNumber[] = '1';
+            for ($i = 1; ; $i++) {
                 $page = $this->getAllTicket($i);
 
-                if ($page['next_page'] !== null){
-                    $pagesNumber[]=str_replace(
+                if ($page['next_page'] !== null) {
+                    $pagesNumber[] = str_replace(
                         "{$this->connekt->getBaseUri()}tickets.json?page=",
                         "",
                         $page['next_page']
                     );
-
-                }else{
+                } else {
                     break;
-
                 }
             }
-
-        }else{
-            $pagesNumber[]= '1';
+        } else {
+            $pagesNumber[] = '1';
         }
 
         return $pagesNumber;
     }
 
-    public function getAllTicket($pageNumber='')
+    public function getAllTicket($pageNumber = '')
     {
         $client = new Client();
 
@@ -64,7 +60,7 @@ class TicketsPages
                         'Authorization' => (string) ($this->connekt->getAuthenticateString()),
                     ],
                 ]);
-            }else{
+            } else {
                 $response = $client->request('GET', "{$this->connekt->getBaseUri()}tickets.json?page={$pageNumber}", [
                     'headers' => [
                         'Content-Type' => 'application/json',
@@ -80,6 +76,5 @@ class TicketsPages
             // Handle authentication error
             return 'Authentication failed: ' . $e->getMessage();
         }
-
     }
 }

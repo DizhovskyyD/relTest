@@ -22,6 +22,6 @@
 2. API_EMAIL - пошта адміністратора
 3. API_TOKEN - токен який потрібно створити в адмінпанелі (Admin Center -> Apps and integrations -> APIs)
 
-
+Після налаштувань запустити файл index.php. Він збереже всі задачі в файлик databse.csv
 
 

@@ -3,6 +3,8 @@
 declare(strict_types=1);
 
 namespace Zendesk;
+
+use Exception;
 use GuzzleHttp\Client;
 
 class Group
@@ -17,13 +19,12 @@ class Group
      */
     public function __construct(Zendesk $connekt, $id)
     {
-        if($connekt->authenticate()) {
+        if ($connekt->authenticate()) {
             $this->connect = $connekt;
             $this->id = $id;
 
             $this->setInfo($connekt, $id);
         }
-
     }
 
     /**
@@ -37,7 +38,7 @@ class Group
     {
         $client = new Client();
         try {
-            $response = $client->request('GET',"{$connekt->getBaseUri()}groups/{$id}",[
+            $response = $client->request('GET', "{$connekt->getBaseUri()}groups/{$id}", [
                 'headers' => [
                     'Content-Type' => 'application/json',
                     'Authorization' => "{$connekt->getAuthenticateString()}",
@@ -54,7 +55,6 @@ class Group
             // Handle authentication error
             return 'Authentication failed: ' . $e->getMessage();
         }
-
     }
 
     /**

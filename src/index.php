@@ -1,13 +1,8 @@
 <?php
-//Headers csv file:
-//Ticket ID, Description, Status, Priority, Agent ID, Agent Name, Agent Email,
-//Contact ID, Contact Name, Contact Email, Group ID, Group Name, Company ID, Company Name, Comments.
+
 use Zendesk\Zendesk;
 use Zendesk\TicketsPages;
 use Zendesk\TicketPage;
-use Zendesk\User;
-use Zendesk\Group;
-use Zendesk\Organization;
 use Zendesk\Ticket;
 
 require 'vendor/autoload.php';
@@ -26,50 +21,49 @@ $connect = new Zendesk($subdomain, $email, $tokenApi);
 
 $answer = $connect->authenticate();
 
-$rezults = array(['Ticket ID'], ['Description'], ['Status'], ['Priority'],
-    ['Agent ID'], ['Agent Name'], ['Agent Email'],
-    ['Contact ID'], ['Contact Name'], ['Contact Email'],
-    ['Group ID'], ['Group Name'],
-    ['Company ID'], ['Company Name'],
-    ['Comments']);
+//Headers csv file
+$rezultsHeader = [
+    'Ticket ID',
+    'Description',
+    'Status',
+    'Priority',
+    'Agent ID',
+    'Agent Name',
+    'Agent Email',
+    'Contact ID',
+    'Contact Name',
+    'Contact Email',
+    'Group ID',
+    'Group Name',
+    'Company ID',
+    'Company Name',
+    'Comments',
+];
+$rezultsBody = [];
+
+$fp = fopen('databse.csv', 'a');
+fputcsv($fp, $rezultsHeader);
 
 $TicketPages = new TicketsPages($connect);
 
+if ($TicketPages->paginationAviable()) {
+    $pagesNumber = $TicketPages->getAllPagesNumber();
 
-$tickets = (new TicketPage($connect))->getAllTicket();
+    foreach ($pagesNumber as $page) {
+        $tickets = (new TicketPage($connect, $page))->getAllTicketsId();
 
+        foreach ($tickets as $ticketId) {
+            $thisTicket = new Ticket($connect, $ticketId);
+            fputcsv($fp, $thisTicket->getTicketInfo('arr'));
+        }
+    }
+} else {
+    $tickets = (new TicketPage($connect))->getAllTicketsId();
+    foreach ($tickets as $ticketId) {
+        $thisTicket = new Ticket($connect, $ticketId);
+        fputcsv($fp, $thisTicket->getTicketInfo('arr'));
+    }
+}
 
-
-/*foreach ($tickets["tickets"] as $ticket){
-    $rezult = array();
-
-    $thisTicket = new Ticket($connect, $ticket['id']);
-    $agent = new User($connect,$ticket['submitter_id']);
-    $contact = new User($connect,$ticket['requester_id']);
-    $organization = new Organization($connect, $ticket['organization_id']);
-    $group = new Group($connect,$ticket['group_id']);
-
-    $rezult [] = $thisTicket->getId();
-    $rezult [] = $thisTicket->getDescription();
-    $rezult [] = $thisTicket->getStatus();
-    $rezult [] = $thisTicket->getPriority();
-
-    $rezult [] = $agent->getId();
-    $rezult [] = $agent->getName();
-    $rezult [] = $agent->getEmale();
-
-    $rezult [] = $contact->getId();
-    $rezult [] = $contact->getName();
-    $rezult [] = $contact->getEmale();
-
-    $rezult [] = $group->getId();
-    $rezult [] = $group->getName();
-
-    $rezult [] = $organization->getId();
-    $rezult [] = $organization->getName();
-
-    $rezult [] = $thisTicket->getComments("str");
-
-}*/
-var_dump($rezults);
+fclose($fp);
 ?>
