@@ -3,7 +3,8 @@
 //Ticket ID, Description, Status, Priority, Agent ID, Agent Name, Agent Email,
 //Contact ID, Contact Name, Contact Email, Group ID, Group Name, Company ID, Company Name, Comments.
 use Zendesk\Zendesk;
-use Zendesk\TicketsInfo;
+use Zendesk\TicketsPages;
+use Zendesk\TicketPage;
 use Zendesk\User;
 use Zendesk\Group;
 use Zendesk\Organization;
@@ -32,9 +33,14 @@ $rezults = array(['Ticket ID'], ['Description'], ['Status'], ['Priority'],
     ['Company ID'], ['Company Name'],
     ['Comments']);
 
-$tickets = (new TicketsInfo($connect))->getAllTicket();
+$TicketPages = new TicketsPages($connect);
 
-foreach ($tickets["tickets"] as $ticket){
+
+$tickets = (new TicketPage($connect))->getAllTicket();
+
+
+
+/*foreach ($tickets["tickets"] as $ticket){
     $rezult = array();
 
     $thisTicket = new Ticket($connect, $ticket['id']);
@@ -64,6 +70,6 @@ foreach ($tickets["tickets"] as $ticket){
 
     $rezult [] = $thisTicket->getComments("str");
 
-}
+}*/
 var_dump($rezults);
 ?>
